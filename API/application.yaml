@@ -1,6 +1,8 @@
 openapi: 3.0.3
 info:
+  title: Booking API
   version: 1.0.0
+  description: API de gestion des réservations
 servers:
   - url: http://localhost:8000
     description: Development server
@@ -34,7 +36,7 @@ paths:
             schema:
               $ref: '#/components/schemas/BookingRequest'
       responses:
-        '200':
+        '201':
           description: Réservation créée avec succès
           content:
             application/json:
@@ -58,32 +60,44 @@ paths:
 components:
   schemas:
     Booking:
-      allOf:
-        - $ref: '#/components/schemas/Customer'
-        - $ref: '#/components/schemas/Room'
-        - type: object
-          properties:
-            reservationDate:
-              type: string
-              format: date
-              example: "05/09/2025"
-              description: Date de la réservation au format DD/MM/YYYY
-          required:
-            - reservationDate
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Identifiant unique de la réservation
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        customer:
+          $ref: '#/components/schemas/Customer'
+        room:
+          $ref: '#/components/schemas/Room'
+        reservationDate:
+          type: string
+          format: date
+          example: "2025-09-05"
+          description: Date de la réservation au format YYYY-MM-DD
+      required:
+        - id
+        - customer
+        - room
+        - reservationDate
 
     BookingRequest:
-      allOf:
-        - $ref: '#/components/schemas/Customer'
-        - $ref: '#/components/schemas/Room'
-        - type: object
-          properties:
-            reservationDate:
-              type: string
-              format: date
-              example: "05/09/2025"
-              description: Date de la réservation au format DD/MM/YYYY
-          required:
-            - reservationDate
+      type: object
+      properties:
+        customer:
+          $ref: '#/components/schemas/Customer'
+        room:
+          $ref: '#/components/schemas/Room'
+        reservationDate:
+          type: string
+          format: date
+          example: "2025-09-05"
+          description: Date de la réservation au format YYYY-MM-DD
+      required:
+        - customer
+        - room
+        - reservationDate
 
     Customer:
       type: object
@@ -134,6 +148,10 @@ components:
           type: integer
           description: Code d'erreur
           example: 400
+        details:
+          type: string
+          description: Détails supplémentaires sur l'erreur
+          example: "Chambre 5 déjà réservée pour le 2025-09-05"
       required:
         - message
         - code
