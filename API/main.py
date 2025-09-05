@@ -2,13 +2,6 @@ from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel, EmailStr, Field, validator
 from typing import List
 from datetime import datetime
-import re
-
-app = FastAPI(
-    title="STD24001",
-    description="This is a specification of STD24001",
-    version="1.0.0"
-)
 
 
 bookings_storage: List[dict] = []
